@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Cart - MyShop</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #0f172a;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           HEADER
+           ========================= */
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 16px 5%;
+
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid #e2e8f0;
+
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            color: #2563eb;
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+
+        .header-btn {
+            padding: 9px 15px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+
+            background: white;
+            color: #475569;
+
+            font-size: 0.95rem;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: #eff6ff;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* =========================
+           PAGE
+           ========================= */
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+
+            padding: 45px 5% 70px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            color: #0f172a;
+            font-size: clamp(2rem, 4vw, 2.7rem);
+            margin-bottom: 7px;
+        }
+
+        .page-header p {
+            color: #64748b;
+        }
+
+        /* =========================
+           EMPTY CART
+           ========================= */
+
+        .empty-cart {
+            background: white;
+            border: 1px dashed #cbd5e1;
+            border-radius: 16px;
+
+            padding: 60px 20px;
+
+            text-align: center;
+        }
+
+        .empty-cart-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .empty-cart h2 {
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .empty-cart p {
+            color: #64748b;
+            margin-bottom: 22px;
+        }
+
+        /* =========================
+           CART ITEMS
+           ========================= */
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+
+            padding: 18px;
+
+            background: white;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+        }
+
+        .cart-item-image {
+            width: 110px;
+            height: 100px;
+
+            object-fit: cover;
+
+            border-radius: 10px;
+
+            background: #f1f5f9;
+            flex-shrink: 0;
+        }
+
+        .item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-name {
+            color: #0f172a;
+            font-size: 1.05rem;
+            font-weight: 700;
+
+            margin-bottom: 6px;
+        }
+
+        .item-description {
+            color: #64748b;
+            font-size: 0.88rem;
+            line-height: 1.5;
+
+            margin-bottom: 7px;
+
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .item-price {
+            color: #2563eb;
+            font-weight: 800;
+        }
+
+        /* =========================
+           QUANTITY
+           ========================= */
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .quantity-control form {
+            margin: 0;
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+
+            background: white;
+            color: #334155;
+
+            font-size: 18px;
+            font-weight: 700;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .quantity-btn:hover {
+            background: #eff6ff;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .quantity-value {
+            min-width: 26px;
+
+            color: #334155;
+            font-weight: 700;
+
+            text-align: center;
+        }
+
+        /* =========================
+           SUBTOTAL
+           ========================= */
+
+        .item-subtotal {
+            min-width: 100px;
+
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 800;
+
+            text-align: right;
+        }
+
+        /* =========================
+           REMOVE
+           ========================= */
+
+        .remove-btn {
+            padding: 8px 11px;
+
+            border: none;
+            border-radius: 7px;
+
+            background: #fef2f2;
+            color: #dc2626;
+
+            font-size: 0.85rem;
+            font-weight: 700;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .remove-btn:hover {
+            background: #fee2e2;
+        }
+
+        /* =========================
+           SUMMARY
+           ========================= */
+
+        .summary {
+            position: sticky;
+            top: 95px;
+
+            padding: 23px;
+
+            background: white;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+        }
+
+        .summary h2 {
+            color: #0f172a;
+            font-size: 1.2rem;
+
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+
+            color: #64748b;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+
+            padding-top: 15px;
+            margin-top: 15px;
+
+            border-top: 1px solid #e2e8f0;
+
+            color: #0f172a;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .summary-total span:last-child {
+            color: #2563eb;
+        }
+
+        /* =========================
+           ACTION BUTTONS
+           ========================= */
+
+        .checkout-btn {
+            width: 100%;
+
+            margin-top: 20px;
+            padding: 13px 15px;
+
+            border: none;
+            border-radius: 9px;
+
+            background: #2563eb;
+            color: white;
+
+            font-size: 0.95rem;
+            font-weight: 700;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .checkout-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .continue-btn {
+            display: block;
+
+            width: 100%;
+
+            margin-top: 10px;
+            padding: 11px 15px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+
+            background: white;
+            color: #475569;
+
+            font-size: 0.9rem;
+            font-weight: 700;
+
+            text-align: center;
+            text-decoration: none;
+
+            cursor: pointer;
+        }
+
+        .continue-btn:hover {
+            background: #f8fafc;
+        }
+
+        .clear-cart-btn {
+            width: 100%;
+
+            margin-top: 15px;
+            padding: 10px 15px;
+
+            border: none;
+            border-radius: 9px;
+
+            background: #fef2f2;
+            color: #dc2626;
+
+            font-size: 0.88rem;
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .clear-cart-btn:hover {
+            background: #fee2e2;
+        }
+
+        /* =========================
+           FOOTER
+           ========================= */
+
+        .footer {
+            margin-top: 30px;
+            padding: 25px 20px;
+
+            background: #0f172a;
+            color: #94a3b8;
+
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 900px) {
+
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary {
+                position: static;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .header {
+                padding: 14px 4%;
+            }
+
+            .brand {
+                font-size: 1.35rem;
+            }
+
+            .page {
+                padding: 30px 4% 50px;
+            }
+
+            .cart-item {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .cart-item-image {
+                width: 90px;
+                height: 85px;
+            }
+
+            .item-details {
+                width: calc(100% - 110px);
+            }
+
+            .quantity-control {
+                order: 3;
+            }
+
+            .item-subtotal {
+                margin-left: auto;
+                order: 4;
+            }
+
+            .remove-btn {
+                order: 5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+         ========================= -->
+
+    <header class="header">
+
+        <div class="brand">
+            MyShop
+        </div>
+
+        <form action="/profile" method="GET">
+            <button type="submit" class="header-btn">
+                ← Continue Shopping
+            </button>
+        </form>
+
+    </header>
+
+
+    <!-- =========================
+         PAGE
+         ========================= -->
+
+    <main class="page">
+
+        <div class="page-header">
+
+            <h1>Shopping Cart</h1>
+
+            <p>
+                Review your items before proceeding to checkout.
+            </p>
+
+        </div>
+
+
+        <% if (!cart || cart.items.length === 0) { %>
+
+            <!-- EMPTY CART -->
+
+            <div class="empty-cart">
+
+                <div class="empty-cart-icon">
+                    🛒
+                </div>
+
+                <h2>Your cart is empty</h2>
+
+                <p>
+                    Add some products to your cart to see them here.
+                </p>
+
+                <form action="/shopNow" method="POST">
+
+                    <button
+                        type="submit"
+                        class="checkout-btn"
+                        style="max-width:220px;">
+
+                        Browse Products
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        <% } else { %>
+
+            <% let grandTotal = 0; %>
+
+            <div class="cart-layout">
+
+                <!-- =========================
+                     CART ITEMS
+                     ========================= -->
+
+                <div class="cart-items">
+
+                    <% cart.items.forEach(item => { %>
+
+                        <%
+                            const subtotal =
+                                item.product.price * item.quantity;
+
+                            grandTotal += subtotal;
+                        %>
+
+                        <article class="cart-item">
+
+                            <img
+                                class="cart-item-image"
+                                src="/uploads/<%= item.product.image %>"
+                                alt="<%= item.product.name %>"
+                            >
+
+
+                            <div class="item-details">
+
+                                <h2 class="item-name">
+                                    <%= item.product.name %>
+                                </h2>
+
+                                <p class="item-description">
+                                    <%= item.product.description %>
+                                </p>
+
+                                <div class="item-price">
+                                    $<%= item.product.price %> each
+                                </div>
+
+                            </div>
+
+
+                            <!-- Quantity -->
+
+                            <div class="quantity-control">
+
+                                <form
+                                    action="/cart/decrease/<%= item.product._id %>"
+                                    method="POST">
+
+                                    <button
+                                        type="submit"
+                                        class="quantity-btn">
+
+                                        −
+
+                                    </button>
+
+                                </form>
+
+
+                                <span class="quantity-value">
+                                    <%= item.quantity %>
+                                </span>
+
+
+                                <form
+                                    action="/cart/increase/<%= item.product._id %>"
+                                    method="POST">
+
+                                    <button
+                                        type="submit"
+                                        class="quantity-btn">
+
+                                        +
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+
+                            <!-- Subtotal -->
+
+                            <div class="item-subtotal">
+                                $<%= subtotal %>
+                            </div>
+
+
+                            <!-- Remove -->
+
+                            <form
+                                action="/cart/remove/<%= item.product._id %>"
+                                method="POST">
+
+                                <button
+                                    type="submit"
+                                    class="remove-btn">
+
+                                    Remove
+
+                                </button>
+
+                            </form>
+
+                        </article>
+
+                    <% }) %>
+
+                </div>
+
+
+                <!-- =========================
+                     SUMMARY
+                     ========================= -->
+
+                <aside class="summary">
+
+                    <h2>Order Summary</h2>
+
+                    <div class="summary-row">
+
+                        <span>
+                            Items
+                        </span>
+
+                        <span>
+                            <%= cart.items.reduce(
+                                (total, item) =>
+                                    total + item.quantity,
+                                0
+                            ) %>
+                        </span>
+
+                    </div>
+
+                    <div class="summary-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <span>
+                            $<%= grandTotal %>
+                        </span>
+
+                    </div>
+
+
+                    <form action="/checkout" method="GET">
+
+                        <button
+                            type="submit"
+                            class="checkout-btn">
+
+                            Proceed to Checkout
+
+                        </button>
+
+                    </form>
+
+
+                    <form action="/cart/clear" method="POST">
+
+                        <button
+                            type="submit"
+                            class="clear-cart-btn"
+                            onclick="return confirm('Are you sure you want to clear your cart?')">
+
+                            🗑️ Clear Cart
+
+                        </button>
+
+                    </form>
+
+                    <form action="/shopNow" method="POST">
+
+                        <button
+                            type="submit"
+                            class="continue-btn">
+
+                            Continue Shopping
+
+                        </button>
+
+                    </form>
+
+                </aside>
+
+            </div>
+
+        <% } %>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+         ========================= -->
+
+    <footer class="footer">
+
+        <p>
+            © 2025 MyShop. All rights reserved.
+        </p>
+
+    </footer>
+
+</body>
+</html>

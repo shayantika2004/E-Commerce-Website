@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MyShop - Home</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #0f172a;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           NAVBAR
+           ========================= */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 16px 5%;
+
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid #e2e8f0;
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            color: #2563eb;
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-links form {
+            display: inline;
+        }
+
+        .nav-btn {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+
+            background: transparent;
+            color: #475569;
+
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+            object-fit: cover;
+
+            border: 2px solid #e2e8f0;
+        }
+
+        .username {
+            color: #334155;
+            font-weight: 600;
+        }
+
+        /* =========================
+           HERO
+           ========================= */
+
+        .hero {
+            max-width: 1200px;
+            margin: 40px auto 0;
+
+            padding: 70px 6%;
+
+            border-radius: 24px;
+
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #4f46e5
+            );
+
+            color: white;
+
+            box-shadow: 0 20px 45px rgba(37, 99, 235, 0.18);
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero-label {
+            display: inline-block;
+
+            margin-bottom: 16px;
+            padding: 7px 12px;
+
+            border-radius: 999px;
+
+            background: rgba(255, 255, 255, 0.16);
+
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .hero h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .shop-btn {
+            background: white;
+            color: #2563eb;
+        }
+
+        .sell-btn {
+            background: rgba(255, 255, 255, 0.14);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           FEATURED PRODUCTS
+           ========================= */
+
+        .products-section {
+            max-width: 1200px;
+            margin: 55px auto;
+            padding: 0 5%;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .section-heading h2 {
+            font-size: 1.8rem;
+            color: #0f172a;
+        }
+
+        .section-heading p {
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(210px, 1fr)
+            );
+            gap: 22px;
+        }
+
+        .product-card {
+            overflow: hidden;
+
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 210px;
+
+            object-fit: cover;
+
+            background: #f1f5f9;
+        }
+
+        .product-content {
+            padding: 18px;
+        }
+
+        .product-name {
+            margin-bottom: 6px;
+
+            color: #0f172a;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .product-price {
+            margin-bottom: 15px;
+
+            color: #2563eb;
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .add-cart-btn {
+            width: 100%;
+
+            padding: 11px 14px;
+
+            border: none;
+            border-radius: 9px;
+
+            background: #2563eb;
+            color: white;
+
+            font-size: 0.95rem;
+            font-weight: 700;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .add-cart-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .empty-state {
+            padding: 50px 20px;
+
+            text-align: center;
+
+            background: white;
+            border: 1px dashed #cbd5e1;
+            border-radius: 16px;
+
+            color: #64748b;
+        }
+
+        /* =========================
+           FOOTER
+           ========================= */
+
+        .footer {
+            margin-top: 70px;
+            padding: 25px 20px;
+
+            background: #0f172a;
+            color: #94a3b8;
+
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 900px) {
+
+            .navbar {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .hero {
+                margin: 25px 4% 0;
+                padding: 50px 7%;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                font-size: 14px;
+            }
+
+            .navbar {
+                padding: 14px 4%;
+            }
+
+            .brand {
+                font-size: 1.35rem;
+            }
+
+            .user-area {
+                gap: 6px;
+            }
+
+            .username {
+                display: none;
+            }
+
+            .hero {
+                border-radius: 18px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .hero-btn {
+                width: 100%;
+            }
+
+            .products-section {
+                padding: 0 4%;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .product-image {
+                height: 190px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+         ========================= -->
+
+    <nav class="navbar">
+
+        <div class="brand">
+            MyShop
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <form action="/profile" method="GET">
+                    <button type="submit" class="nav-btn">
+                        Home
+                    </button>
+                </form>
+            </li>
+
+            <li>
+                <form action="/shopNow" method="POST">
+                    <button type="submit" class="nav-btn">
+                        Products
+                    </button>
+                </form>
+            </li>
+
+            <li>
+                <form action="/cart" method="GET">
+                    <button type="submit" class="nav-btn">
+                        🛒 Cart (<%= cartCount %>)
+                    </button>
+                </form>
+            </li>
+
+            <li>
+                <form action="/orders" method="GET">
+                    <button type="submit" class="nav-btn">
+                        📦 My Orders
+                    </button>
+                </form>
+            </li>
+
+            <li>
+                <form action="/logout" method="POST">
+                    <button type="submit" class="nav-btn">
+                        Logout
+                    </button>
+                </form>
+            </li>
+
+        </ul>
+
+        <div class="user-area">
+
+            <img
+                class="user-avatar"
+                src="https://www.planetware.com/wpimages/2020/01/india-in-pictures-beautiful-places-to-photograph-taj-mahal.jpg"
+                alt="Profile"
+            >
+
+            <span class="username">
+                Hi, <%= user.username %>
+            </span>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         HERO
+         ========================= -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <span class="hero-label">
+                Welcome to MyShop
+            </span>
+
+            <h2>
+                Discover products you'll love.
+            </h2>
+
+            <p>
+                Browse products from our marketplace, add your favorites
+                to your cart, or start selling your own products.
+            </p>
+
+            <div class="hero-actions">
+
+                <form action="/shopNow" method="POST">
+                    <button
+                        type="submit"
+                        class="hero-btn shop-btn">
+                        Shop Products
+                    </button>
+                </form>
+
+                <form action="/sellProducts">
+                    <button
+                        type="submit"
+                        class="hero-btn sell-btn">
+                        Sell Products
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FEATURED PRODUCTS
+         ========================= -->
+
+    <section class="products-section">
+
+        <div class="section-heading">
+
+            <div>
+                <h2>Featured Products</h2>
+
+                <p>
+                    Explore products available in the marketplace.
+                </p>
+            </div>
+
+        </div>
+
+
+        <% if (products && products.length > 0) { %>
+
+            <div class="product-grid">
+
+                <% products.forEach(product => { %>
+
+                    <div class="product-card">
+
+                        <img
+                            class="product-image"
+                            src="/uploads/<%= product.image %>"
+                            alt="<%= product.name %>"
+                        >
+
+                        <div class="product-content">
+
+                            <div class="product-name">
+                                <%= product.name %>
+                            </div>
+
+                            <div class="product-price">
+                                $<%= product.price %>
+                            </div>
+
+                            <form
+                                action="/add-to-cart/<%= product._id %>"
+                                method="POST">
+
+                                <button
+                                    type="submit"
+                                    class="add-cart-btn">
+
+                                    🛒 Add to Cart
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            </div>
+
+        <% } else { %>
+
+            <div class="empty-state">
+                <h3>No products available</h3>
+
+                <p>
+                    Products will appear here once sellers add them.
+                </p>
+            </div>
+
+        <% } %>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+         ========================= -->
+
+    <footer class="footer">
+
+        <p>
+            © 2025 MyShop. All rights reserved.
+        </p>
+
+    </footer>
+
+</body>
+</html>

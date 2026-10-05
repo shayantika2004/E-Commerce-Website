@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Order Confirmed - MyShop</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f8fafc;
+            color: #0f172a;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* =========================
+           HEADER
+           ========================= */
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 16px 5%;
+
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .brand {
+            color: #2563eb;
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+
+        .header-btn {
+            padding: 9px 15px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+
+            background: white;
+            color: #475569;
+
+            font-size: 0.9rem;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: #eff6ff;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* =========================
+           MAIN
+           ========================= */
+
+        .page {
+            flex: 1;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 50px 20px;
+        }
+
+        .success-card {
+            width: 100%;
+            max-width: 620px;
+
+            padding: 45px 35px;
+
+            background: white;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow:
+                0 15px 40px rgba(15, 23, 42, 0.08);
+        }
+
+        /* =========================
+           SUCCESS ICON
+           ========================= */
+
+        .success-icon {
+            width: 82px;
+            height: 82px;
+
+            margin: 0 auto 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #dcfce7;
+            color: #16a34a;
+
+            font-size: 42px;
+            font-weight: 800;
+        }
+
+        .success-card h1 {
+            color: #0f172a;
+
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+
+            margin-bottom: 12px;
+        }
+
+        .message {
+            max-width: 480px;
+
+            margin: 0 auto 30px;
+
+            color: #64748b;
+
+            font-size: 0.98rem;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           ORDER INFORMATION
+           ========================= */
+
+        .order-info {
+            padding: 22px;
+
+            background: #f8fafc;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+
+            text-align: left;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            gap: 20px;
+
+            padding: 12px 0;
+
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .value {
+            max-width: 65%;
+
+            color: #0f172a;
+            font-size: 0.9rem;
+            font-weight: 700;
+
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .status {
+            color: #16a34a;
+        }
+
+        .total {
+            color: #2563eb;
+            font-size: 1.05rem;
+        }
+
+        /* =========================
+           BUTTONS
+           ========================= */
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+
+            margin-top: 25px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 12px 18px;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            font-size: 0.95rem;
+            font-weight: 700;
+
+            transition: 0.2s ease;
+        }
+
+        .home-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .orders-btn {
+            background: white;
+            color: #2563eb;
+
+            border: 1px solid #bfdbfe;
+        }
+
+        .home-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .orders-btn:hover {
+            background: #eff6ff;
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           FOOTER
+           ========================= */
+
+        .footer {
+            padding: 24px 20px;
+
+            background: #0f172a;
+            color: #94a3b8;
+
+            text-align: center;
+
+            font-size: 0.9rem;
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 14px 4%;
+            }
+
+            .brand {
+                font-size: 1.35rem;
+            }
+
+            .page {
+                padding: 35px 15px;
+            }
+
+            .success-card {
+                padding: 32px 20px;
+            }
+
+            .info-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .value {
+                max-width: 100%;
+                text-align: left;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+         ========================= -->
+
+    <header class="header">
+
+        <div class="brand">
+            MyShop
+        </div>
+
+        <form action="/profile" method="GET">
+            <button type="submit" class="header-btn">
+                Home
+            </button>
+        </form>
+
+    </header>
+
+
+    <!-- =========================
+         SUCCESS CONTENT
+         ========================= -->
+
+    <main class="page">
+
+        <section class="success-card">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h1>
+                Order Placed Successfully!
+            </h1>
+
+            <p class="message">
+                Thank you for your purchase.
+                Your order has been successfully created
+                and is now being processed.
+            </p>
+
+
+            <div class="order-info">
+
+                <div class="info-row">
+
+                    <span class="label">
+                        Order ID
+                    </span>
+
+                    <span class="value">
+                        <%= order._id %>
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="label">
+                        Total Amount
+                    </span>
+
+                    <span class="value total">
+                        $<%= order.totalAmount %>
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="label">
+                        Order Status
+                    </span>
+
+                    <span class="value status">
+                        <%= order.status %>
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="label">
+                        Delivery Address
+                    </span>
+
+                    <span class="value">
+                        <%= order.address %>
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <a
+                    href="/profile"
+                    class="btn home-btn">
+
+                    ← Back to Home
+
+                </a>
+
+
+                <a
+                    href="/orders"
+                    class="btn orders-btn">
+
+                    📦 My Orders
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+         ========================= -->
+
+    <footer class="footer">
+
+        <p>
+            © 2025 MyShop. All rights reserved.
+        </p>
+
+    </footer>
+
+</body>
+</html>

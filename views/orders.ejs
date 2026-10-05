@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Orders - MyShop</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #0f172a;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           HEADER
+           ========================= */
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 16px 5%;
+
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid #e2e8f0;
+
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            color: #2563eb;
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+
+        .header-btn {
+            padding: 9px 15px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+
+            background: white;
+            color: #475569;
+
+            font-size: 0.9rem;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: #eff6ff;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* =========================
+           PAGE
+           ========================= */
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 45px 5% 70px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            color: #0f172a;
+            font-size: clamp(2rem, 4vw, 2.7rem);
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           EMPTY STATE
+           ========================= */
+
+        .empty-orders {
+            padding: 60px 20px;
+
+            background: white;
+
+            border: 1px dashed #cbd5e1;
+            border-radius: 16px;
+
+            text-align: center;
+        }
+
+        .empty-icon {
+            margin-bottom: 15px;
+            font-size: 3rem;
+        }
+
+        .empty-orders h2 {
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        .empty-orders p {
+            color: #64748b;
+        }
+
+        /* =========================
+           ORDER CARD
+           ========================= */
+
+        .order-card {
+            margin-bottom: 22px;
+
+            background: white;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+
+            box-shadow:
+                0 6px 20px rgba(15, 23, 42, 0.05);
+
+            overflow: hidden;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+            flex-wrap: wrap;
+
+            padding: 20px 22px;
+
+            background: #f8fafc;
+
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .order-id {
+            color: #334155;
+            font-size: 0.92rem;
+            font-weight: 700;
+
+            word-break: break-all;
+        }
+
+        .order-id span {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* =========================
+           STATUS
+           ========================= */
+
+        .status {
+            padding: 7px 13px;
+
+            border-radius: 999px;
+
+            background: #eff6ff;
+            color: #2563eb;
+
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        /* =========================
+           ORDER ITEMS
+           ========================= */
+
+        .order-items {
+            padding: 5px 22px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+
+            gap: 16px;
+
+            padding: 16px 0;
+
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 80px;
+            height: 70px;
+
+            object-fit: cover;
+
+            flex-shrink: 0;
+
+            border-radius: 9px;
+
+            background: #f1f5f9;
+        }
+
+        .item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-details h3 {
+            margin-bottom: 5px;
+
+            color: #0f172a;
+            font-size: 1rem;
+        }
+
+        .item-details p {
+            margin: 3px 0;
+
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+
+        .item-total {
+            flex-shrink: 0;
+
+            color: #2563eb;
+            font-size: 0.98rem;
+            font-weight: 800;
+        }
+
+        /* =========================
+           ORDER FOOTER
+           ========================= */
+
+        .order-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+
+            padding: 20px 22px;
+
+            background: #f8fafc;
+
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .footer-label {
+            color: #94a3b8;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .footer-value {
+            color: #334155;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .footer-info.total-info {
+            text-align: right;
+        }
+
+        .total-info .footer-value {
+            color: #2563eb;
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        /* =========================
+           BACK BUTTON
+           ========================= */
+
+        .back-btn {
+            display: block;
+
+            width: fit-content;
+
+            margin: 30px auto 0;
+
+            padding: 11px 18px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+
+            background: white;
+            color: #475569;
+
+            text-decoration: none;
+
+            font-size: 0.9rem;
+            font-weight: 700;
+
+            transition: 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #eff6ff;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* =========================
+           FOOTER
+           ========================= */
+
+        .site-footer {
+            padding: 25px 20px;
+
+            background: #0f172a;
+            color: #94a3b8;
+
+            text-align: center;
+
+            font-size: 0.9rem;
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 650px) {
+
+            .header {
+                padding: 14px 4%;
+            }
+
+            .brand {
+                font-size: 1.35rem;
+            }
+
+            .page {
+                padding: 30px 4% 50px;
+            }
+
+            .order-header {
+                align-items: flex-start;
+            }
+
+            .order-items {
+                padding: 5px 16px;
+            }
+
+            .order-item {
+                align-items: flex-start;
+            }
+
+            .item-image {
+                width: 70px;
+                height: 65px;
+            }
+
+            .item-total {
+                font-size: 0.9rem;
+            }
+
+            .order-footer {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-info.total-info {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+         ========================= -->
+
+    <header class="header">
+
+        <div class="brand">
+            MyShop
+        </div>
+
+        <form action="/profile" method="GET">
+            <button type="submit" class="header-btn">
+                ← Back to Home
+            </button>
+        </form>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN
+         ========================= -->
+
+    <main class="page">
+
+        <div class="page-header">
+
+            <h1>My Orders</h1>
+
+            <p>
+                View your previous purchases, order status,
+                delivery details, and purchase totals.
+            </p>
+
+        </div>
+
+
+        <% if (!orders || orders.length === 0) { %>
+
+            <div class="empty-orders">
+
+                <div class="empty-icon">
+                    📦
+                </div>
+
+                <h2>No orders yet</h2>
+
+                <p>
+                    Your completed orders will appear here.
+                </p>
+
+            </div>
+
+        <% } else { %>
+
+
+            <% orders.forEach(order => { %>
+
+                <article class="order-card">
+
+                    <!-- =========================
+                         ORDER HEADER
+                         ========================= -->
+
+                    <div class="order-header">
+
+                        <div class="order-id">
+
+                            <span>Order ID:</span>
+                            <%= order._id %>
+
+                        </div>
+
+                        <div class="status">
+                            <%= order.status %>
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================
+                         ORDER ITEMS
+                         ========================= -->
+
+                    <div class="order-items">
+
+                        <% order.items.forEach(item => { %>
+
+                            <div class="order-item">
+
+                                <img
+                                    class="item-image"
+                                    src="/uploads/<%= item.product.image %>"
+                                    alt="<%= item.product.name %>"
+                                >
+
+
+                                <div class="item-details">
+
+                                    <h3>
+                                        <%= item.product.name %>
+                                    </h3>
+
+                                    <p>
+                                        Quantity:
+                                        <%= item.quantity %>
+                                    </p>
+
+                                    <p>
+                                        Price at purchase:
+                                        $<%= item.price %>
+                                    </p>
+
+                                </div>
+
+
+                                <div class="item-total">
+                                    $<%= item.price * item.quantity %>
+                                </div>
+
+                            </div>
+
+                        <% }) %>
+
+                    </div>
+
+
+                    <!-- =========================
+                         ORDER FOOTER
+                         ========================= -->
+
+                    <div class="order-footer">
+
+                        <div class="footer-info">
+
+                            <span class="footer-label">
+                                Delivery Address
+                            </span>
+
+                            <span class="footer-value">
+                                <%= order.address %>
+                            </span>
+
+                        </div>
+
+
+                        <div class="footer-info total-info">
+
+                            <span class="footer-label">
+                                Order Total
+                            </span>
+
+                            <span class="footer-value">
+                                $<%= order.totalAmount %>
+                            </span>
+
+                        </div>
+
+
+                        <div class="footer-info">
+
+                            <span class="footer-label">
+                                Order Date
+                            </span>
+
+                            <span class="footer-value">
+                                <%= order.createdAt.toLocaleDateString() %>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            <% }) %>
+
+        <% } %>
+
+
+        <a href="/profile" class="back-btn">
+            ← Back to Home
+        </a>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+         ========================= -->
+
+    <footer class="site-footer">
+
+        <p>
+            © 2025 MyShop. All rights reserved.
+        </p>
+
+    </footer>
+
+</body>
+</html>

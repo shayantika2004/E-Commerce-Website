@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sell Products - MyShop</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #0f172a;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           HEADER
+           ========================= */
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 16px 5%;
+
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid #e2e8f0;
+
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            color: #2563eb;
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            padding: 9px 15px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+
+            background: white;
+            color: #475569;
+
+            font-size: 0.95rem;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .header-btn:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+            background: #eff6ff;
+        }
+
+        /* =========================
+           PAGE
+           ========================= */
+
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 45px 5% 70px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 4vw, 2.7rem);
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           PRODUCT FORM
+           ========================= */
+
+        .sell-card {
+            background: white;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+
+            padding: 30px;
+
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+
+            margin-bottom: 45px;
+        }
+
+        .form-title {
+            margin-bottom: 8px;
+
+            color: #0f172a;
+            font-size: 1.5rem;
+        }
+
+        .form-subtitle {
+            margin-bottom: 25px;
+            color: #64748b;
+        }
+
+        .product-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .form-label {
+            color: #334155;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+
+            padding: 12px 14px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+
+            background: white;
+            color: #0f172a;
+
+            font-size: 0.95rem;
+
+            outline: none;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .image-preview {
+            display: none;
+
+            width: 100%;
+            max-height: 240px;
+
+            object-fit: cover;
+
+            border-radius: 12px;
+
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            padding: 12px 20px;
+
+            border-radius: 9px;
+
+            font-size: 0.95rem;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .primary-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .secondary-btn {
+            border: 1px solid #cbd5e1;
+            background: white;
+            color: #475569;
+        }
+
+        .secondary-btn:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        /* =========================
+           PRODUCT LIST
+           ========================= */
+
+        .section-title {
+            margin-bottom: 20px;
+
+            color: #0f172a;
+            font-size: 1.6rem;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(220px, 1fr)
+            );
+            gap: 22px;
+        }
+
+        .product-card {
+            overflow: hidden;
+
+            background: white;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 14px 30px rgba(15, 23, 42, 0.09);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 210px;
+
+            object-fit: cover;
+
+            background: #f1f5f9;
+        }
+
+        .product-info {
+            padding: 18px;
+        }
+
+        .product-card h4 {
+            margin-bottom: 7px;
+
+            color: #0f172a;
+            font-size: 1.05rem;
+        }
+
+        .product-description {
+            margin-bottom: 10px;
+
+            color: #64748b;
+            line-height: 1.5;
+
+            font-size: 0.9rem;
+
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .price {
+            margin-bottom: 15px;
+
+            color: #2563eb;
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            flex: 1;
+
+            padding: 9px 12px;
+
+            border: none;
+            border-radius: 8px;
+
+            font-weight: 700;
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .edit-btn {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .edit-btn:hover {
+            background: #dbeafe;
+        }
+
+        .delete-btn {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .delete-btn:hover {
+            background: #fee2e2;
+        }
+
+        .empty-state {
+            padding: 50px 20px;
+
+            text-align: center;
+
+            background: white;
+
+            border: 1px dashed #cbd5e1;
+            border-radius: 16px;
+
+            color: #64748b;
+        }
+
+        /* =========================
+           FOOTER
+           ========================= */
+
+        .footer {
+            padding: 25px 20px;
+
+            background: #0f172a;
+            color: #94a3b8;
+
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 14px 4%;
+            }
+
+            .brand {
+                font-size: 1.35rem;
+            }
+
+            .page {
+                padding: 30px 4% 50px;
+            }
+
+            .sell-card {
+                padding: 22px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .primary-btn,
+            .secondary-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .header-actions {
+                gap: 5px;
+            }
+
+            .header-btn {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
+
+            .product-card img {
+                height: 190px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+         ========================= -->
+
+    <header class="header">
+
+        <div class="brand">
+            MyShop
+        </div>
+
+        <div class="header-actions">
+
+            <form action="/profile" method="GET">
+                <button type="submit" class="header-btn">
+                    ← Home
+                </button>
+            </form>
+
+            <form action="/shopNow" method="POST">
+                <button type="submit" class="header-btn">
+                    Products
+                </button>
+            </form>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN PAGE
+         ========================= -->
+
+    <main class="page">
+
+        <div class="page-header">
+
+            <h1>Sell Your Products</h1>
+
+            <p>
+                Add, manage, edit, and remove the products
+                you want to sell on MyShop.
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+             ADD / EDIT FORM
+             ========================= -->
+
+        <section class="sell-card">
+
+            <h2 class="form-title" id="formTitle">
+                Add Product
+            </h2>
+
+            <p class="form-subtitle">
+                Provide the product information below.
+            </p>
+
+            <form
+                id="productForm"
+                class="product-form"
+                action="/addProduct"
+                method="POST"
+                enctype="multipart/form-data">
+
+                <input
+                    type="hidden"
+                    name="productId"
+                    id="productId">
+
+                <input
+                    type="hidden"
+                    name="existingImage"
+                    id="existingImage">
+
+
+                <label class="form-label" for="productName">
+                    Product Name
+                </label>
+
+                <input
+                    class="form-input"
+                    type="text"
+                    id="productName"
+                    name="name"
+                    placeholder="Enter product name"
+                    required>
+
+
+                <label class="form-label" for="productDescription">
+                    Product Description
+                </label>
+
+                <textarea
+                    class="form-textarea"
+                    id="productDescription"
+                    name="description"
+                    placeholder="Describe your product"
+                    required></textarea>
+
+
+                <label class="form-label" for="productPrice">
+                    Price
+                </label>
+
+                <input
+                    class="form-input"
+                    type="number"
+                    id="productPrice"
+                    name="price"
+                    placeholder="Enter price"
+                    step="0.01"
+                    required>
+
+
+                <label class="form-label" for="productImage">
+                    Product Image
+                </label>
+
+                <input
+                    class="form-input"
+                    type="file"
+                    id="productImage"
+                    name="image"
+                    accept="image/*">
+
+
+                <img
+                    id="previewImage"
+                    class="image-preview"
+                    src=""
+                    alt="Product Preview">
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        id="submitBtn"
+                        class="primary-btn">
+
+                        Add Product
+
+                    </button>
+
+                    <button
+                        type="button"
+                        id="goBackBtn"
+                        class="secondary-btn"
+                        style="display:none;">
+
+                        Cancel Edit
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- =========================
+             USER PRODUCTS
+             ========================= -->
+
+        <h2 class="section-title">
+            Your Products
+        </h2>
+
+        <div class="products" id="productsList">
+
+            <% if (!products || products.length === 0) { %>
+
+                <div class="empty-state">
+
+                    <h3>No products yet</h3>
+
+                    <p>
+                        Products you add will appear here.
+                    </p>
+
+                </div>
+
+            <% } else { %>
+
+                <% products.forEach(function(product) { %>
+
+                    <article
+                        class="product-card"
+                        data-id="<%= product._id %>">
+
+                        <img
+                            src="/uploads/<%= product.image %>"
+                            alt="<%= product.name %>">
+
+                        <div class="product-info">
+
+                            <h4>
+                                <%= product.name %>
+                            </h4>
+
+                            <p class="product-description">
+                                <%= product.description %>
+                            </p>
+
+                            <div class="price">
+                                $<%= product.price %>
+                            </div>
+
+                            <div class="card-actions">
+
+                                <button
+                                    type="button"
+                                    class="edit-btn"
+                                    onclick="editProduct(this)">
+
+                                    Edit
+
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="delete-btn"
+                                    onclick="deleteProduct(this)">
+
+                                    Delete
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                <% }) %>
+
+            <% } %>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+         ========================= -->
+
+    <footer class="footer">
+
+        <p>
+            © 2025 MyShop. All rights reserved.
+        </p>
+
+    </footer>
+
+
+    <!-- =========================
+         EXISTING JAVASCRIPT
+         ========================= -->
+
+    <script>
+
+        let editingCard = null;
+
+
+        function editProduct(button) {
+
+            editingCard = button.closest(".product-card");
+
+            const name =
+                editingCard.querySelector("h4").innerText;
+
+            const description =
+                editingCard.querySelector(".product-description").innerText;
+
+            const price =
+                editingCard
+                    .querySelector(".price")
+                    .innerText
+                    .replace("$", "");
+
+            const imageSrc =
+                editingCard.querySelector("img").src;
+
+            const productId =
+                editingCard.dataset.id;
+
+
+            document.getElementById("formTitle").innerText =
+                "Edit Product";
+
+            document.getElementById("submitBtn").innerText =
+                "Update Product";
+
+            document.getElementById("goBackBtn").style.display =
+                "inline-block";
+
+
+            document.getElementById("productName").value =
+                name;
+
+            document.getElementById("productDescription").value =
+                description;
+
+            document.getElementById("productPrice").value =
+                price;
+
+
+            document.getElementById("previewImage").src =
+                imageSrc;
+
+            document.getElementById("previewImage").style.display =
+                "block";
+
+
+            document.getElementById("productId").value =
+                productId;
+
+            const filename =
+                imageSrc.split("/").pop();
+
+            document.getElementById("existingImage").value =
+                filename;
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+
+        document
+            .getElementById("goBackBtn")
+            .addEventListener("click", resetForm);
+
+
+        function resetForm() {
+
+            document
+                .getElementById("productForm")
+                .reset();
+
+            document
+                .getElementById("previewImage")
+                .style.display = "none";
+
+            document
+                .getElementById("formTitle")
+                .innerText = "Add Product";
+
+            document
+                .getElementById("submitBtn")
+                .innerText = "Add Product";
+
+            document
+                .getElementById("goBackBtn")
+                .style.display = "none";
+
+            editingCard = null;
+        }
+
+
+        function handleImagePreview(event) {
+
+            const preview =
+                document.getElementById("previewImage");
+
+            const file =
+                event.target.files[0];
+
+            if (file) {
+
+                const reader =
+                    new FileReader();
+
+                reader.onload = function(e) {
+
+                    preview.src =
+                        e.target.result;
+
+                    preview.style.display =
+                        "block";
+                }
+
+                reader.readAsDataURL(file);
+
+            } else {
+
+                preview.src = "";
+                preview.style.display = "none";
+
+            }
+        }
+
+
+        document
+            .getElementById("productImage")
+            .addEventListener(
+                "change",
+                handleImagePreview
+            );
+
+
+        function deleteProduct(button) {
+
+            const card =
+                button.closest(".product-card");
+
+            const productId =
+                card.dataset.id;
+
+
+            if (confirm(
+                "Are you sure you want to delete this product?"
+            )) {
+
+                fetch(
+                    `/deleteProduct/${productId}`,
+                    {
+                        method: "DELETE"
+                    }
+                )
+                .then(res => res.json())
+
+                .then(data => {
+
+                    if (data.success) {
+
+                        card.remove();
+
+                        if (editingCard === card) {
+                            resetForm();
+                        }
+
+                        const productsList =
+                            document.getElementById("productsList");
+
+                        if (
+                            productsList
+                                .querySelectorAll(
+                                    ".product-card"
+                                )
+                                .length === 0
+                        ) {
+
+                            productsList.innerHTML = "";
+
+                            const p =
+                                document.createElement("div");
+
+                            p.className =
+                                "empty-state";
+
+                            p.innerHTML = `
+                                <h3>No products yet</h3>
+                                <p>
+                                    Products you add will appear here.
+                                </p>
+                            `;
+
+                            productsList.appendChild(p);
+                        }
+
+                        alert(
+                            "Product deleted successfully!"
+                        );
+
+                    } else {
+
+                        alert(
+                            "Failed to delete product."
+                        );
+
+                    }
+
+                })
+
+                .catch(err =>
+                    console.error(err)
+                );
+            }
+        }
+
+    </script>
+
+</body>
+</html>
